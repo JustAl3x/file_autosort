@@ -12,20 +12,22 @@ class DownloadsHandler(FileSystemEventHandler):
     uniCount = 1
 
     def on_modified(self, event):
-        print("Event!")
+        #give time for file to fully download
         time.sleep(3)
         for filename in os.listdir(downloads_folder):
             src = downloads_folder + "/" + filename
             dest = ""
 
-            
             historicalSize = -1
+            #this try/except waits until the file size stops increasing
+            #before moving it, i.e. the download has complete.
             try:
                 while (historicalSize != os.stat(filename).st_size):
                     historicalSize = os.stat(filename).st_size
             except FileNotFoundError:
                 print("Download finished.")
-
+            
+            #RE, CCSEP, CC mentioned below are all reference to specific classes
             if (".png" in filename or ".jpg" in filename or ".jpeg" in filename):
                 dest = image_folder + "/" + filename
             elif ("RE" in filename):
